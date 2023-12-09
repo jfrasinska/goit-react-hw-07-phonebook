@@ -9,6 +9,7 @@ import './ContactList.css';
 const ContactList = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(state => state.contacts.contacts);
+  const filter = useSelector(state => state.filter.filter);
 
   useEffect(() => {
     dispatch(fetchContacts());
@@ -18,9 +19,16 @@ const ContactList = () => {
     dispatch(deleteContact(id));
   };
 
+  const filteredContacts = contacts.filter(
+    contact =>
+      contact.name && contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
+  console.log('Filtered Contacts:', filteredContacts);
+
   return (
     <ul className="contact-list">
-      {contacts.map(contact => (
+      {filteredContacts.map(contact => (
         <li className="contact-list-item" key={contact.id}>
           <p>Name: {contact.name}</p>
           <p>Phone: {contact.phone}</p>

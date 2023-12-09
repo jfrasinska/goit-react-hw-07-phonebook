@@ -1,10 +1,18 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from '../../Redux/Reducers/contactSlice';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchContacts,
+  deleteContact,
+} from '../../Redux/Reducers/contactSlice';
 import './ContactList.css';
 
-const ContactList = ({ contacts }) => {
+const ContactList = () => {
   const dispatch = useDispatch();
+  const contacts = useSelector(state => state.contacts.contacts);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const handleDeleteContact = id => {
     dispatch(deleteContact(id));
@@ -15,7 +23,7 @@ const ContactList = ({ contacts }) => {
       {contacts.map(contact => (
         <li className="contact-list-item" key={contact.id}>
           <p>Name: {contact.name}</p>
-          <p>Phone: {contact.number}</p>
+          <p>Phone: {contact.phone}</p>
           <button
             className="button-list"
             onClick={() => handleDeleteContact(contact.id)}

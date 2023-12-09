@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  addContact,
-  deleteContact,
-} from '../../Redux/Reducers/contactSlice.js';
-import { setFilter } from '../../Redux/Reducers/filterSlice.js';
-import ContactForm from '../ContactFrom/ContactForm.jsx';
-import ContactList from '../ContactList/ContactList.jsx';
+import { createContact } from '../../Redux/Reducers/contactSlice';
+import { setFilter } from '../../Redux/Reducers/filterSlice';
+import ContactForm from '../ContactForm/ContactForm';
+import ContactList from '../ContactList/ContactList';
 import './App.css';
 
 const App = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.contacts);
   const filter = useSelector(state => state.filter.filter);
 
   const handleInputChange = e => {
     const { name, value } = e.target;
-    dispatch(addContact({ [name]: value }));
+    if (name === 'filter') {
+      dispatch(setFilter(value));
+    } else {
+      // Handle input change for name and number if needed
+    }
   };
 
   const handleSubmit = e => {
@@ -29,39 +29,15 @@ const App = () => {
       return;
     }
 
-    const isContactExist = contacts.some(
-      contact => contact.name.toLowerCase() === name.toLowerCase()
-    );
-
-    if (isContactExist) {
-      alert(`Contact with the name "${name}" already exists.`);
-      return;
-    }
-
     const newContact = {
-      id: `id-${contacts.length + 1}`,
       name: name.trim(),
       number: number.trim(),
     };
 
-    dispatch(addContact(newContact));
+    dispatch(createContact(newContact));
     setName('');
     setNumber('');
   };
-
-  const handleFilterChange = e => {
-    const { value } = e.target;
-    dispatch(setFilter(value));
-  };
-
-  const handleDeleteContact = id => {
-    dispatch(deleteContact(id));
-  };
-
-  const filteredContacts = contacts.filter(
-    contact =>
-      contact.name && contact.name.toLowerCase().includes(filter.toLowerCase())
-  );
 
   return (
     <div className="wrapper">
@@ -76,13 +52,10 @@ const App = () => {
           type="text"
           name="filter"
           value={filter}
-          onChange={handleFilterChange}
+          onChange={e => handleInputChange(e)}
         />
       </label>
-      <ContactList
-        contacts={filteredContacts}
-        onDeleteContact={handleDeleteContact}
-      />
+      <ContactList />
     </div>
   );
 };

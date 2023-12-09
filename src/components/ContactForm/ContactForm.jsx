@@ -1,23 +1,25 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { addContact } from '../../Redux/Reducers/contactSlice';
+import { createContact } from '../../Redux/Reducers/contactSlice';
 import './ContactForm.css';
 
 const ContactForm = () => {
   const dispatch = useDispatch();
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     const newContact = {
-      id: `id-${Date.now()}`,
       name: e.target.name.value.trim(),
       number: e.target.number.value.trim(),
     };
 
-    dispatch(addContact(newContact));
-
-    e.target.reset();
+    try {
+      await dispatch(createContact(newContact));
+      e.target.reset();
+    } catch (error) {
+      console.error('Error creating contact:', error.message);
+    }
   };
 
   return (

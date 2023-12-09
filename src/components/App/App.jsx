@@ -5,8 +5,8 @@ import {
   deleteContact,
 } from '../../Redux/Reducers/contactSlice.js';
 import { setFilter } from '../../Redux/Reducers/filterSlice.js';
-import ContactForm from '../ContactFrom/ContactForm.js';
-import ContactList from '../ContactList/ContactList.js';
+import ContactForm from '../ContactFrom/ContactForm.jsx';
+import ContactList from '../ContactList/ContactList.jsx';
 import './App.css';
 
 const App = () => {

@@ -24,8 +24,6 @@ const ContactList = () => {
       contact.name && contact.name.toLowerCase().includes(filter.toLowerCase())
   );
 
-  console.log('Filtered Contacts:', filteredContacts);
-
   return (
     <ul className="contact-list">
       {filteredContacts.map(contact => (
